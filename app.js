@@ -5,6 +5,7 @@ const helmet = require('helmet');
 const mongoSanitize = require('express-mongo-sanitize');
 const xss = require('xss-clean');
 const hpp = require('hpp');
+const compression = require('compression');
 //Start express app
 const app = express();
 const morgan = require('morgan');
@@ -55,7 +56,7 @@ app.use(
     ],
   })
 );
-
+app.use(compression());
 //test middleware
 app.use((req, res, next) => {
   req.requestTime = new Date().toISOString();

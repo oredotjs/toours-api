@@ -122,7 +122,6 @@ tourSchema.pre('save', function (next) {
   next();
 });
 tourSchema.post('save', (doc, next) => {
-  console.log('this');
   next();
 });
 tourSchema.post('find', (doc, next) => {
@@ -151,14 +150,13 @@ tourSchema.pre(/^find/, function (next) {
   });
   next();
 });
-tourSchema.post(/^find/, function (docs, next) {
-  console.log(`time = ${Date.now() - this.start}ms`);
-  next();
-});
+// tourSchema.post(/^find/, function (docs, next) {
+//   console.log(`time = ${Date.now() - this.start}ms`);
+//   next();
+// });
 // AGGREGATION MIDLEWARE
 tourSchema.pre('aggregate', function (next) {
   this.pipeline().unshift({ $match: { secretTour: { $ne: true } } });
-  console.log(this.pipeline());
   next();
 });
 

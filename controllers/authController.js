@@ -6,7 +6,6 @@ const User = require('../models/userModel');
 const AppError = require('../utils/AppError');
 const catchAysnc = require('../utils/catchAsync');
 const Email = require('../utils/email');
-const sendEmail = require('../utils/email');
 
 const signToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET, {
@@ -25,7 +24,6 @@ const createSendToken = (user, statusCode, res) => {
   };
   if (process.env.NODE_ENV === 'production') cookieOptions.secure = true;
   res.cookie('jwt', token, cookieOptions);
-  console.log(token);
   //Remove password from output
   user.password = undefined;
   res.status(statusCode).json({
@@ -82,7 +80,6 @@ exports.protect = catchAysnc(async (req, res, next) => {
   }
   //2 VERIFICATION TOKEN
   const decoded = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
-  console.log(decoded);
   //3 Check if user still exist
   const freshUser = await User.findById(decoded.id);
   if (!freshUser) {
@@ -95,7 +92,6 @@ exports.protect = catchAysnc(async (req, res, next) => {
     );
   }
 
-  console.log(freshUser.changedPasswordAfter(decoded.iat));
   //NEXT MIDDLEWARE TO PORTECTED DATA
   req.user = freshUser;
   next();
@@ -120,7 +116,6 @@ exports.forgotPassword = catchAysnc(async (req, res, next) => {
   //2 Generate Random Token
   const resetToken = user.createPasswordResetToken();
   await user.save({ validateBeforeSave: false });
-  console.log(user);
   //3 Send token to user Email
 
   // const message = `Forgot your password?
@@ -142,7 +137,6 @@ exports.forgotPassword = catchAysnc(async (req, res, next) => {
       message: 'Token sent to email!',
     });
   } catch (err) {
-    console.log(err);
     user.passwordResetToken = undefined;
     user.passwordResetExpires = undefined;
     await user.save({ validateBeforeSave: false });

@@ -1,7 +1,6 @@
 const multer = require('multer');
 const sharp = require('sharp');
 const Tour = require('../models/tourModels');
-const APIfeatures = require('../utils/apiFeatures');
 const AppError = require('../utils/AppError');
 const catchAsync = require('../utils/catchAsync');
 const factory = require('./handlerFactory');
@@ -249,7 +248,7 @@ exports.getDistances = catchAsync(async (req, res, next) => {
           coordinates: [lng * 1, lat * 1],
         },
         distanceField: 'distance',
-        distanceMultiplier: 0.001,
+        distanceMultiplier: multiplier,
       },
     },
   ]);
