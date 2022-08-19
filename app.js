@@ -8,6 +8,9 @@ const hpp = require('hpp');
 const compression = require('compression');
 //Start express app
 const app = express();
+
+//trust proxies
+app.enable('trust proxy');
 const morgan = require('morgan');
 const viewRouter = require('./routes/viewRoutes');
 const tourRouter = require('./routes/tourRoutes');
