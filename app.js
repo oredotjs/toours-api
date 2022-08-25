@@ -12,7 +12,6 @@ const app = express();
 
 //trust proxies
 app.enable('trust proxy');
-
 //Implement Cors
 app.use(cors());
 //Access-Control-Allow-Origin *
@@ -34,7 +33,23 @@ app.set('views', path.join(__dirname, 'views'));
 
 //MIDDLEWAREs
 //Set security http headers
-app.use(helmet());
+app.use(
+  helmet.contentSecurityPolicy({
+    directives: {
+      defaultSrc: ["'self'", 'data:', 'blob:'],
+
+      fontSrc: ["'self'", 'https:', 'data:'],
+
+      scriptSrc: ["'self'", 'https://*.cloudflare.com'],
+
+      scriptSrcElem: ["'self'", 'https:', 'https://*.cloudflare.com'],
+
+      styleSrc: ["'self'", 'https:', 'unsafe-inline'],
+
+      connectSrc: ["'self'", 'data', 'https://*.cloudflare.com'],
+    },
+  })
+);
 
 //devlopment logging
 if (process.env.NODE_ENV === 'development') {
